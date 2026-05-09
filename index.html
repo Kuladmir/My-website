@@ -8,8 +8,8 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
-<title>高级工具栏网页</title>
-
+<title>Kuladmir的网站</title>
+<link rel="icon" href="ku.png" type="image/png">
 <style>
 
 /* =========================
@@ -151,7 +151,7 @@ body{
 
     flex: 1;
 
-    min-height: 72px;
+    min-height: 40px;
 
     display: flex;
 
@@ -199,6 +199,8 @@ body{
             #ff5f6d,
             #d63031
         );
+	text-decoration: none; /* 去掉下划线 */
+    color: inherit;         /* 保持原文字颜色 */
 }
 
 .tool2{
@@ -239,6 +241,8 @@ body{
             #d980fa,
             #8e44ad
         );
+	text-decoration: none; /* 去掉下划线 */
+    color: inherit;         /* 保持原文字颜色 */
 }
 
 /* =========================
@@ -250,6 +254,10 @@ body{
     font-size: 22px;
 
     line-height: 1.2;
+	
+	font-family:
+        "Times New Roman",
+        serif;
 
     font-weight: bold;
 
@@ -434,7 +442,7 @@ body{
         flex:
             1 1 calc(50% - 10px);
 
-        min-height: 68px;
+        min-height: 50px;
     }
 
     .chinese{
@@ -483,24 +491,13 @@ body{
     <!-- 工具栏 -->
 
     <div class="toolbar">
-
         <!-- 工具1 -->
-
-        <div class="tool tool1">
+<a href="reference.html" class="tool tool1">
 
             <div class="chinese">
-                工具一
+                文献分享 Reference
             </div>
-
-            <div class="english">
-                Tool 1
-            </div>
-
-            <div class="tool-content">
-                这里是工具一的详细内容。
-            </div>
-
-        </div>
+</a>
 
         <!-- 工具2 -->
 
@@ -558,21 +555,13 @@ body{
 
         <!-- 工具5 -->
 
-        <div class="tool tool5">
+<a href="about.html" class="tool tool5">
 
-            <div class="chinese">
-                工具五
-            </div>
-
-            <div class="english">
-                Tool 5
-            </div>
-
-            <div class="tool-content">
-                这里是工具五的详细内容。
-            </div>
-
-        </div>
+    <div class="chinese">
+        关于我  About Me?
+    </div>
+	
+</a>
 
     </div>
 
