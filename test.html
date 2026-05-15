@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>关于我 About Me</title>
+<link rel="icon" href="ku.png" type="image/png">
+<style>
+/* =========================
+   全局
+========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /* 优先使用现代无衬线字体，最后回退到宋体 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "SimSun", sans-serif;
+    /* 其他样式保持不变... */
+}
+
+/* =========================
+   顶部固定区域
+========================= */
+.header-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(14px);
+    transition: background 0.35s ease, box-shadow 0.35s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+/* 滚动缩放 */
+.header-container.shrink {
+    background: rgba(255,255,255,0.94);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+/* =========================
+   信息栏
+========================= */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 22px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #333;
+    transition: transform 0.35s ease, padding 0.35s ease;
+}
+
+.header-container.shrink .top-bar {
+    transform: scaleY(0.9);
+    transform-origin: top;
+    padding: 11px 22px;
+}
+
+/* =========================
+   工具栏
+========================= */
+.toolbar {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    padding: 8px 12px 12px 12px;
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(10px);
+}
+
+/* =========================
+   工具按钮
+========================= */
+.tool {
+    position: relative;
+    flex: 1;
+    min-height: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 14px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    user-select: none;
+    font-weight: bold;
+    color: white;
+}
+
+.tool:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+
+/* 工具颜色 */
+.tool1 { background: linear-gradient(135deg, #ff5f6d, #d63031); 
+	text-decoration: none; }
+.tool2 { background: linear-gradient(135deg, #ffeaa7, #f1c40f); 
+	text-decoration: none; }
+.tool3 { background: linear-gradient(135deg, #74b9ff, #0984e3); 
+	text-decoration: none; }
+.tool4 { background: linear-gradient(135deg, #55efc4, #00b894); 
+	text-decoration: none; }
+/* 当前页面对应模块按钮白色 */
+.tool5 { background: white; color: #8e44ad; border: 3px solid #8e44ad; }
+
+/* =========================
+   中文字体
+========================= */
+.chinese {
+    font-size: 22px;
+    line-height: 1.2;
+	font-family: "Times New Roman", serif;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* =========================
+   英文字体
+========================= */
+.english {
+    margin-top: 5px;
+    font-size: 15px;
+    font-family: "Times New Roman", serif;
+    line-height: 1.1;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+/* =========================
+   下拉菜单
+========================= */
+.tool-content {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 84px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    min-width: 240px;
+    padding: 16px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.95);
+    color: #333;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    z-index: 100;
+}
+
+.tool-content.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.tool-content::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 10px 10px 10px;
+    border-style: solid;
+    border-color: transparent transparent white transparent;
+}
+
+/* =========================
+   主体
+========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "SimSun", serif;
+    /* 设置 circle.png 为全屏背景 */
+    background-size: cover;
+    overflow-x: hidden;
+    min-height: 100vh; /* 保证背景铺满整个视口高度 */
+}
+
+/* =========================
+   主体布局（80%宽度居中）
+========================= */
+.main {
+    padding: 105px 0 80px; /* 上下留白，避开顶部导航 */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 内容水平居中 */
+}
+
+/* 毛玻璃个人介绍框 */
+.profile-container {
+    width: 80%; /* 覆盖80%的页面宽度 */
+    max-width: 1000px; /* 在大屏上限制最大宽度，防止太扁长 */
+    padding: 50px 40px;
+    
+    /* 核心：毛玻璃模糊效果 */
+    background: rgba(255, 255, 255, 0.65); /* 半透明白色背景 */
+    backdrop-filter: blur(15px); /* 背景模糊度，数值越大越模糊 */
+    -webkit-backdrop-filter: blur(15px); /* 兼容 Safari 浏览器 */
+    
+    border-radius: 24px; /* 圆角 */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); /* 柔和的阴影增加层次感 */
+    border: 1px solid rgba(255, 255, 255, 0.4); /* 淡淡的边框增加质感 */
+    
+    text-align: center; /* 内容居中 */
+    margin-bottom: 30px;
+	border: 1px solid rgba(255, 255, 255, 0.6);
+    /* 增加一个微弱的内部白色反光 */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+/* 头像与文字样式微调 */
+.avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.avatar:hover {
+    transform: scale(1.05) rotate(3deg);
+}
+
+.main h1 {
+    font-size: 36px;
+    color: #1e3d59;
+    margin-bottom: 15px;
+}
+
+.intro-text {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 40px;
+}
+
+.info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+	border: 1px solid rgba(255, 255, 255, 0.5);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+/* 技能与兴趣双栏布局 */
+.info-sections {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 40px;
+    text-align: left;
+}
+
+.info-card {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.5); /* 内部卡片也做轻微半透明 */
+    padding: 25px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-card h3 {
+    margin-bottom: 15px;
+    color: #0984e3;
+    border-bottom: 2px solid rgba(9, 132, 227, 0.2);
+    padding-bottom: 8px;
+}
+
+.info-card ul {
+    list-style-type: none;
+    padding-left: 5px;
+}
+
+.info-card li {
+    margin-bottom: 8px;
+    color: #444;
+    position: relative;
+    padding-left: 15px;
+}
+
+.info-card li::before {
+    content: "•";
+    color: #0984e3;
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+
+/* 社交按钮样式 */
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.social-btn {
+    padding: 12px 30px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    color: white;
+    display: inline-block;
+}
+
+.btn-bilibili {
+    background: linear-gradient(135deg, #fb7299, #d63031);
+}
+.btn-bilibili:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(251, 114, 153, 0.4);
+}
+
+.btn-github {
+    background: #333;
+}
+.btn-github:hover {
+    background: #222;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* 返回主页按钮 */
+.back-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background: rgba(255, 255, 255, 0.8);
+    color: #0984e3;
+    border: 2px solid #0984e3;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: #0984e3;
+    color: white;
+}
+
+/* 手机适配 */
+@media (max-width: 768px) {
+    .profile-container {
+        width: 92%; /* 手机上稍微宽一点，体验更好 */
+        padding: 30px 20px;
+    }
+    .info-sections {
+        flex-direction: column;
+    }
+    .main h1 {
+        font-size: 28px;
+    }
+}
+/* 返回主页按钮 */
+.back-btn {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 24px;
+    background: #0984e3;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.back-btn:hover {
+    background: #74b9ff;
+}
+
+/* 手机适配 */
+@media (max-width: 768px){
+    .toolbar { flex-wrap: wrap; }
+    .tool { flex: 1 1 calc(50% - 10px); min-height: 50px; }
+    .chinese { font-size: 18px; }
+    .english { font-size: 13px; }
+    .main h1 { font-size: 34px; }
+    .main p { font-size: 17px; }
+}
+/* 定义向上淡入的动画 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 将动画应用到个人介绍框 */
+.profile-container {
+    /* 保留原有的所有样式... */
+    animation: fadeInUp 0.8s ease-out; /* 新增：0.8秒的淡入动画 */
+}
+/* =========================
+   视差滚动背景
+========================= */
+.parallax-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('circle.png') no-repeat center center;
+    background-size: cover;
+    z-index: -1;
+    /* 核心：让背景图移动速度变慢 */
+    transform: translateZ(-1px) scale(1.1);
+    will-change: transform;
+}
+</style>
+</head>
+
+<body>
+<div class="parallax-bg"></div>
+<!-- 顶部固定区域 -->
+<div class="header-container">
+    <div class="top-bar">
+        <div>Kuladmir Present</div>
+        <div id="datetime"></div>
+    </div>
+
+    <!-- 工具栏 -->
+    <div class="toolbar">
+<a href="reference.html" class="tool tool1">
+            <div class="chinese">文献分享 Reference</div>
+</a>
+
+<a href="actools.html" class="tool tool2">
+
+    <div class="chinese">
+        多功能工具  Tools
+    </div>
+	
+</a>
+
+<a href="tools3.html" class="tool tool3">
+
+    <div class="chinese">
+        工具3  Tools 3
+    </div>
+	
+</a>
+
+<a href="tools4.html" class="tool tool4">
+
+    <div class="chinese">
+        工具4  Tools4
+    </div>
+</a>
+
+        <div class="tool tool5">
+            <div class="chinese">关于我  About Me?</div>
+        </div>
+    </div>
+</div>
+
+<!-- 主体 -->
+<!-- 主体内容 -->
+<!-- 主体 -->
+<div class="main">
+    <!-- 毛玻璃个人介绍框 -->
+    <div class="profile-container">
+        <!-- 个人头像 -->
+        <img src="ku.png" alt="Kuladmir的个人头像" class="avatar">
+        
+        <!-- 核心介绍 -->
+        <h1>你好，我是 Kuladmir 👋</h1>
+        <p class="intro-text">
+            一名热爱网页开发与界面设计的创作者。我喜欢将创意转化为美观、流畅的交互动画，
+            致力于探索前端技术的无限可能。
+        </p>
+
+        <!-- 技能与兴趣分区 -->
+        <div class="info-sections">
+            <div class="info-card">
+                <h3>🛠️ 技能特长</h3>
+                <ul>
+                    <li>HTML5 & CSS3 网页布局</li>
+                    <li>JavaScript 交互动画</li>
+                    <li>UI/UX 界面视觉设计</li>
+                </ul>
+            </div>
+            <div class="info-card">
+                <h3>✨ 兴趣爱好</h3>
+                <ul>
+                    <li>探索前沿网页特效</li>
+                    <li>摄影与视觉艺术</li>
+                    <li>开源项目分享</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 社交链接 -->
+        <div class="social-links">
+            <a href="https://space.bilibili.com/171726961" target="_blank" class="social-btn btn-bilibili">Bilibili</a>
+            <a href="https://github.com/Kuladmir" target="_blank" class="social-btn btn-github">GitHub</a>
+        </div>
+    </div>
+
+    <!-- 返回主页按钮 -->
+    <a href="index.html" class="back-btn">返回主页</a>
+    
+    <!-- 底部留白 -->
+    <div style="height: 100px;"></div>
+</div>	
+<script>
+/* =========================
+   工具菜单展开
+========================= */
+
+const tools =
+    document.querySelectorAll('.tool');
+
+tools.forEach(tool=>{
+
+    tool.addEventListener('click',(e)=>{
+
+        e.stopPropagation();
+
+        const content =
+            tool.querySelector('.tool-content');
+
+        document
+            .querySelectorAll('.tool-content')
+            .forEach(c=>{
+
+                if(c !== content){
+
+                    c.classList.remove('show');
+                }
+            });
+
+        content.classList.toggle('show');
+    });
+});
+
+/* 点击空白关闭 */
+
+document.addEventListener('click',()=>{
+
+    document
+        .querySelectorAll('.tool-content')
+        .forEach(c=>{
+
+            c.classList.remove('show');
+        });
+});
+
+/* =========================
+   时间显示
+========================= */
+
+function updateDateTime(){
+
+    const now =
+        new Date();
+
+    const y =
+        now.getFullYear();
+
+    const m =
+        String(now.getMonth()+1)
+        .padStart(2,'0');
+
+    const d =
+        String(now.getDate())
+        .padStart(2,'0');
+
+    const h =
+        String(now.getHours())
+        .padStart(2,'0');
+
+    const min =
+        String(now.getMinutes())
+        .padStart(2,'0');
+
+    const s =
+        String(now.getSeconds())
+        .padStart(2,'0');
+
+    document
+        .getElementById('datetime')
+        .textContent =
+        `${y}-${m}-${d} ${h}:${min}:${s}`;
+}
+
+setInterval(updateDateTime,1000);
+
+updateDateTime();
+
+/* =========================
+   滚动动画
+========================= */
+
+const header =
+    document.querySelector('.header-container');
+
+window.addEventListener('scroll',()=>{
+
+    if(window.scrollY > 50){
+
+        header.classList.add('shrink');
+
+    }else{
+
+        header.classList.remove('shrink');
+    }
+});
+
+</script>
+</body>
+</html>
